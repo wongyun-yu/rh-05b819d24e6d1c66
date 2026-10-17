@@ -1,0 +1,13 @@
+{
+ "v": 2,
+ "kdf": "PBKDF2-SHA256",
+ "iter": 310000,
+ "cipher": "AES-256-GCM",
+ "kid": "13ced592a45fe960",
+ "salt": "dyD+M6SRGm5rG5/H/+mKvA==",
+ "w": "H2toC0atR5UKuZIy6IZ5K/knN2djiXy7BqQAjMZsifDWaqCsAE4d/Qn0waie2+8n1dbJmiTbDhrl45Hl",
+ "pm": "kkMcgDh2kbCsvGyALoRvRMmkNPhU3ccbY7kETeX5EVMxUhaxKGW6hi1RHMHb0oc9FHT+mdRb3SRatNqiHPR9LrgAP2Q59ENns1soTIQ0QtVeJORse4z0ntdhX8smiTTjDxa/fSX4uYBTsuLGrH6dTQkKqAC2DnJC2duiHq0JM9jLzPKqXP66fU/igyiPKRvUFHNF56hXO8gK53LCQSPahT1R2bmZ2l+OLcdmk1B14IiDNLC/w/ATdzcOXDRPXdYMN3vzkuTAkLWSEc4=",
+ "pb": {
+  "975a1b78cb037317": "gwoV0igsX0T5PcD9dQ577sXVFHt+9K/lI3eZCk6BCrOcRcWykWQhYmnB4H4E/jXosg=="
+ }
+}

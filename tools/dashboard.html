@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Research Hub</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
+<script>try { var t = localStorage.getItem("rh-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+/* Layout: monotone — zinc neutrals, ink as the active colour, one indigo accent for focus and links; projects as a bento
+   (project · recent updates · shared pages), a project as a numbered stage rail with page cards under each stage */
+:root {
+  --bg: #fafafa; --surface: #ffffff; --ink: #09090b; --ink-2: #27272a; --muted: #71717a; --faint: #a1a1aa; --line: #e4e4e7; --line-2: #d4d4d8;
+  --hover: #f4f4f5; --accent: #3e63dd; --live: #16a34a; --live-bg: #dcfce7; --warn: #b45309;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.04); --shadow-2: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -16px rgba(0,0,0,.18);
+  --f-body: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #09090b; --surface: #111113; --ink: #fafafa; --ink-2: #e4e4e7; --muted: #a1a1aa; --faint: #71717a; --line: #232326; --line-2: #3f3f46;
+  --hover: #18181b; --accent: #8da4ff; --live: #4ade80; --live-bg: #052e16; --warn: #fbbf24;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #09090b; --surface: #111113; --ink: #fafafa; --ink-2: #e4e4e7; --muted: #a1a1aa; --faint: #71717a; --line: #232326; --line-2: #3f3f46;
+  --hover: #18181b; --accent: #8da4ff; --live: #4ade80; --live-bg: #052e16; --warn: #fbbf24;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-padding-top: 72px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+[hidden] { display: none !important; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.eyebrow { font-size: 13px; font-weight: 500; color: var(--muted); }
+
+/* top bar */
+.topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
+.topbar .in { max-width: 1120px; margin: 0 auto; padding: 0 16px; height: 56px; display: flex; align-items: center; gap: 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 650; font-size: 15px; text-decoration: none; letter-spacing: -0.015em; }
+.logo { width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: var(--bg); display: grid; place-items: center; flex: none; }
+.crumb { color: var(--faint); }
+.crumb-p { color: var(--muted); font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.sp { flex: 1; }
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font: 500 13.5px var(--f-body); cursor: pointer; text-decoration: none; white-space: nowrap; transition: border-color .12s, background .12s; }
+.btn:hover { border-color: var(--line-2); background: var(--hover); }
+.btn.icon { width: 34px; padding: 0; justify-content: center; color: var(--muted); }
+.btn.icon:hover { color: var(--ink); }
+.btn.search { color: var(--muted); min-width: 220px; }
+.btn.search kbd { margin-left: auto; font: 11px var(--f-mono); color: var(--faint); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; background: var(--bg); }
+.btn.ink { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ink:hover { opacity: .88; background: var(--ink); }
+@media (max-width: 640px) { .btn.search { min-width: 0; } .btn.search .lbl, .btn.search kbd, .hide-sm { display: none; } }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 96px; display: grid; gap: 40px; }
+.hero h1 { margin: 6px 0 0; font-size: clamp(36px, 6.4vw, 60px); line-height: 1.02; font-weight: 750; letter-spacing: -0.045em; }
+.hero p { margin: 14px 0 0; color: var(--muted); max-width: 60ch; font-size: 15.5px; text-wrap: pretty; }
+
+/* bento */
+.bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-1); min-width: 0; }
+.tile h3 { margin: 0 0 12px; font-size: 13px; font-weight: 600; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pcard { grid-column: span 2; display: grid; grid-template-rows: auto 1fr auto; gap: 26px; text-decoration: none; position: relative;
+  transition: border-color .15s, box-shadow .15s, transform .15s; }
+.pcard:hover { border-color: var(--line-2); box-shadow: var(--shadow-2); }
+.pcard:active { transform: translateY(1px); }
+.pcard .tag { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--f-mono); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.pcard h2 { margin: 14px 0 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.18; font-weight: 700; letter-spacing: -0.03em; text-wrap: balance; }
+.pcard .psub { margin: 10px 0 0; color: var(--muted); font-size: 14.5px; max-width: 56ch; }
+.go { position: absolute; top: 20px; right: 20px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--muted); transition: all .15s; }
+.pcard:hover .go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; align-self: end; }
+.rail .seg { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.rail .seg i { height: 6px; border-radius: 3px; background: var(--line); }
+.rail .seg.on i { background: var(--ink); }
+.rail .seg span { font-size: 13px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rail .seg.on span { color: var(--ink-2); font-weight: 500; }
+.pmeta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.pmeta b { color: var(--ink); font-weight: 600; }
+ul.feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+ul.feed a { display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 10px; padding: 7px 8px; margin: 0 -8px; border-radius: 8px; text-decoration: none; }
+ul.feed a:hover { background: var(--hover); }
+ul.feed .t { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+ul.feed .t small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+ul.feed .ago { font: 12px var(--f-mono); color: var(--faint); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
+.dot.live { background: var(--live); box-shadow: 0 0 0 3px color-mix(in srgb, var(--live) 22%, transparent); }
+/* (no endless pulse: two pulsing dots kept the idle hub at 13–21 % of a CPU core — 10-16 사용자 "켜 놓으면 렉") */
+.empty { color: var(--faint); font-size: 13px; padding: 4px 0; }
+.dot.new { background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.newchip { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.newchip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.tile h3 .lnk { border: 0; background: none; padding: 0; font: 500 12.5px var(--f-body); color: var(--muted); cursor: pointer; }
+.tile h3 .lnk:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.tile h3 .cnt-new { color: var(--accent); font-weight: 600; }
+.pmeta .nw { color: var(--accent); font-weight: 600; }
+.step .nd { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 6px; vertical-align: middle; }
+.tile.recent { grid-column: 3; grid-row: 1 / span var(--np, 2); }   /* beside every board card (--np = number of boards) */
+.tile.shared { grid-column: span 2; }
+@media (max-width: 860px) { .bento { grid-template-columns: 1fr 1fr; } .pcard, .tile.shared { grid-column: span 2; } .tile.recent { grid-column: auto; grid-row: auto; } }
+@media (max-width: 560px) { .bento { grid-template-columns: 1fr; } .pcard, .tile.shared, .tile.recent { grid-column: auto; } .rail .seg span { display: none; } }
+
+/* project view */
+.phead { display: grid; gap: 10px; }
+.phead h1 { margin: 0; font-size: clamp(28px, 4.6vw, 44px); line-height: 1.08; font-weight: 750; letter-spacing: -0.04em; text-wrap: balance; }
+.phead p { margin: 0; color: var(--muted); max-width: 64ch; }
+.stepper { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow-1); }
+.step { display: grid; gap: 4px; padding: 14px 14px 12px; text-decoration: none; border-right: 1px solid var(--line); position: relative; min-width: 0; transition: background .12s; }
+.step:last-child { border-right: 0; }
+.step:hover { background: var(--hover); }
+.step .n { font: 500 11.5px var(--f-mono); color: var(--faint); }
+.step .nm { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.step .ct { font-size: 13px; color: var(--muted); }
+.step.vac .nm { color: var(--faint); font-weight: 500; }
+.step.has::after { content: ""; position: absolute; left: 14px; right: 14px; top: 0; height: 2px; background: var(--ink); border-radius: 0 0 2px 2px; }
+@media (max-width: 760px) { .stepper { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); } .step { border-bottom: 1px solid var(--line); } .step:nth-child(2n) { border-right: 0; } }
+.stage { display: grid; gap: 14px; }
+.stage-h { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.stage-h .no { font: 500 12px var(--f-mono); color: var(--faint); }
+.stage-h h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em; }
+.stage-h .hint { color: var(--muted); font-size: 13.5px; }
+.stage.vacant .stage-h h2 { color: var(--faint); font-weight: 600; }
+.stage.vacant { gap: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; }
+.card { position: relative; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; padding: 18px; border-radius: 14px; background: var(--surface);
+  border: 1px solid var(--line); box-shadow: var(--shadow-1); min-width: 0; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.card:hover { border-color: var(--line-2); box-shadow: var(--shadow-2); }
+.card:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) { .card, .pcard { transition: none; } .card:active, .pcard:active { transform: none; } }
+.card .top { display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.card .top .mini { margin-left: auto; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--muted); background: var(--hover); white-space: nowrap; }
+.chip.live { color: var(--live); background: var(--live-bg); }
+.chip.sh { color: var(--ink); background: none; border: 1px solid var(--line); }
+.card h3 { margin: 0; font-size: 16.5px; line-height: 1.35; font-weight: 650; letter-spacing: -0.015em; text-wrap: balance; }
+.card-link { text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.card-link:focus-visible { outline: none; }
+.card-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card p { margin: 6px 0 0; color: var(--muted); font-size: 13.5px; text-wrap: pretty; }
+.card .foot { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+.card .foot .when b { color: var(--ink-2); font-weight: 500; }
+.card .foot .sp { flex: 1; }
+.mini { position: relative; z-index: 1; height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+  font: 500 12.5px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.mini:hover { color: var(--ink); border-color: var(--line-2); }
+details.arch { position: relative; z-index: 2; }
+details.arch summary { list-style: none; }
+details.arch summary::-webkit-details-marker { display: none; }
+details.arch .menu { position: absolute; right: 0; bottom: calc(100% + 6px); width: 220px; max-height: 240px; overflow: auto; padding: 6px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow-2); }
+details.arch .menu a { display: block; padding: 6px 8px; border-radius: 6px; font: 12.5px var(--f-mono); text-decoration: none; color: var(--ink-2); }
+details.arch .menu a:hover { background: var(--hover); }
+.phead .pact { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.card.pend { border-style: dashed; box-shadow: none; background: transparent; }
+.card.pend h3 { color: var(--ink-2); }
+.chip.wait { color: var(--warn, #b45309); background: color-mix(in srgb, #f59e0b 14%, transparent); }
+.card .foot .acts { margin-left: auto; display: flex; gap: 6px; }
+.mini.danger:hover { color: #dc2626; }
+.ren { position: relative; z-index: 1; display: inline-grid; place-items: center; width: 26px; height: 26px; margin-left: 6px; vertical-align: middle; border: 0; border-radius: 7px;
+  background: none; color: var(--faint); cursor: pointer; opacity: 0; transition: opacity .12s, background .12s, color .12s; }
+.ren svg { width: 14px; height: 14px; }
+h1 .ren, h2 .ren { transform: translateY(-2px); }
+.card .top .ren { margin-left: 0; }
+.phead:hover .ren, .stage-h:hover .ren, .card:hover .ren, .ren:focus-visible { opacity: 1; }
+.ren:hover { background: var(--hover); color: var(--ink); }
+@media (hover: none) { .ren { opacity: .7; } }
+.tile.newb { grid-column: 3; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; border-style: dashed; box-shadow: none;
+  background: transparent; color: var(--muted); cursor: pointer; font: inherit; min-height: 120px; transition: border-color .15s, color .15s, background .15s; }
+.tile.newb:hover { border-color: var(--line-2); color: var(--ink); background: var(--surface); }
+.tile.newb b { font-size: 14.5px; font-weight: 650; color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
+.tile.newb span { font-size: 13px; }
+.pcard.wait { border-style: dashed; box-shadow: none; }
+.pcard .tag.wait { color: var(--warn, #b45309); border-color: color-mix(in srgb, #f59e0b 40%, transparent); }
+.pcard .rail.none { font-size: 13px; color: var(--faint); }
+.pnote { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); padding: 10px 14px; border: 1px dashed var(--line-2); border-radius: 12px; }
+.nosec { display: grid; justify-items: start; gap: 12px; padding: 28px; border: 1px dashed var(--line-2); border-radius: 14px; color: var(--muted); font-size: 14px; }
+.nosec b { color: var(--ink); font-size: 16px; }
+@media (max-width: 860px) { .bento { grid-auto-flow: row dense; } .tile.newb { grid-column: auto; } }
+@media (max-width: 560px) { .tile.newb { grid-column: auto; } }
+.dropov { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--bg) 72%, transparent);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); pointer-events: none; }
+.dropov .box { display: grid; justify-items: center; gap: 6px; padding: 36px 44px; border: 2px dashed var(--accent); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-2); text-align: center; }
+.dropov .box b { font-size: 17px; letter-spacing: -0.02em; }
+.dropov .box span { color: var(--muted); font-size: 13.5px; }
+footer { color: var(--faint); font-size: 13px; display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 20px; }
+.view-in { animation: vin .22s ease-out; }
+@keyframes vin { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .view-in { animation: none; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="#"><span class="logo"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 17 10 9l5 5 4-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hide-sm">Research Hub</span></a>
+  <span class="crumb" id="crumb-sl" hidden>/</span><span class="crumb-p" id="crumb-p" hidden></span>
+  <span class="sp"></span>
+  <button class="btn search" id="find" type="button" aria-label="검색 (Ctrl+K)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="lbl">페이지 검색</span><kbd id="kbd">Ctrl K</kbd></button>
+  <button class="btn icon" id="theme" type="button" aria-label="테마 바꾸기"></button>
+  <button class="btn" id="lock" type="button"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="hide-sm">잠그기</span></button>
+</div></header>
+<div class="wrap">
+  <section id="home" aria-label="판">
+    <div class="hero">
+      <div class="eyebrow">Wongyun Yu · 진행 중인 연구</div>
+      <h1>Research Hub</h1>
+      <p>판을 누르면 섹션별 페이지가 나옵니다. 판마다 섹션을 따로 정하고, 받은 HTML은 판 화면에 끌어다 놓으면 올라갑니다.</p>
+    </div>
+    <div class="bento" id="bento" style="margin-top:32px"></div>
+  </section>
+  <section id="project" aria-live="polite" hidden></section>
+  <div class="dropov" id="dropov" hidden><div class="box"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><b id="dropov-t">놓으면 올리기 창이 열립니다</b><span id="dropov-s">HTML 파일</span></div></div>
+  <footer>
+    <span>모든 페이지는 브라우저 안에서만 풀립니다</span>
+    <span class="mono" id="foot"></span>
+  </footer>
+</div>
+<script type="application/json" id="hub-data">{{DATA}}</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("hub-data").textContent);
+  var R = window.__rh || {};
+  // sections belong to a board (판): D.stages = [{key, label, hint, project, own}] (manifest rows + hub_boards.tsv)
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]; }); }
+  function fmtSize(b) { if (!b) return ""; if (b > 1e6) return (b / 1e6).toFixed(1) + " MB"; return Math.max(1, Math.round(b / 1e3)) + " KB"; }
+  function mins(iso) { return iso ? (Date.now() - new Date(iso).getTime()) / 60000 : Infinity; }
+  function ago(iso) {
+    if (!iso) return ""; var d = mins(iso);
+    if (d < 1) return "방금"; if (d < 60) return Math.round(d) + "분 전"; if (d < 1440) return Math.round(d / 60) + "시간 전";
+    return Math.round(d / 1440) + "일 전";
+  }
+  function stamp(iso) { if (!iso) return "-"; if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso.slice(5); var d = new Date(iso); var p = function (n) { return String(n).padStart(2, "0"); };
+    return p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()); }
+  var IC = {
+    arrow: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    users: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6"/></svg>',
+    globe: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>',
+    sys: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>'
+  };
+  IC.up = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>';
+  IC.plus = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  IC.edit = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>';
+  var SHARE = {invite: [IC.users, "초대"], link: [IC.globe, "링크 공유"]};
+  // uploads waiting for the next build (this browser's, from rh-ui.js — the ctl inbox) · D.rej = what the build refused
+  var PEND = {items: [], other: 0};
+  function pendOf(pid, cat) { return PEND.items.filter(function (x) { return x.project === pid && x.category === cat && x.op === "add" && !x.slug; }); }
+  function pendFor(it) { return PEND.items.filter(function (x) { return x.project === it.project && x.category === it.category && x.slug === it.slug; }).pop(); }
+  // a board change sent from this browser shows at once (op board in the inbox) — the next build makes it real
+  function pendBoard(pid) { return PEND.items.filter(function (x) { return x.op === "board" && x.project === pid; }).pop(); }
+  function projList() {
+    var l = D.projects.slice();
+    PEND.items.forEach(function (x) {
+      if (x.op === "board" && x.new && !x.del && !l.some(function (p) { return p.id === x.project; })) l.push({id: x.project, name: x.title, sub: "", tag: "", own: true});
+    });
+    return l.map(function (p) {
+      var b = pendBoard(p.id); if (!b) return p;
+      return Object.assign({}, p, {name: p.own && b.title ? b.title : p.name, wait: b.del ? "del" : b.new ? "new" : "edit", waitId: b.id});
+    });
+  }
+  function stagesOf(pid) {   // [[key, label, hint, own]]
+    var l = D.stages.filter(function (s) { return s.project === pid; }).map(function (s) { return [s.key, s.label, s.hint, !!s.own]; });
+    var b = pendBoard(pid);
+    if (b && !b.del && b.stages) l = l.filter(function (s) { return !s[3]; }).concat(b.stages.map(function (s) { return [s.key, s.label, "", true]; }));
+    return l;
+  }
+  var byProj = {};
+  function syncProj() { byProj = {}; projList().forEach(function (p) { byProj[p.id] = p; }); }
+  syncProj();
+  function itemsOf(pid) { return D.items.filter(function (it) { return it.project === pid; }); }
+  function latest(items) { return items.reduce(function (m, it) { return it.updated && (!m || it.updated > m) ? it.updated : m; }, ""); }
+  function stageLabel(pid, k) { var s = stagesOf(pid).filter(function (x) { return x[0] === k; })[0]; return s ? s[1] : k; }
+  function isLive(it) { return it.kind === "db" && mins(it.updated) < 75; }
+  function shareOf(it) { return (it.share && it.share.mode) || "private"; }
+  // 'changed since you last looked' — per browser: rh-seen = {pdir: when this browser last opened it, _0: first visit}
+  var SEEN = (function () { try { return JSON.parse(localStorage.getItem("rh-seen") || "null"); } catch (e) { return null; } })();
+  if (!SEEN) { SEEN = {_0: new Date().toISOString()}; try { localStorage.setItem("rh-seen", JSON.stringify(SEEN)); } catch (e) {} }
+  function isNew(it) { if (!it.updated || !it.pdir || it.kind === "link") return false; var s = SEEN[it.pdir] || SEEN._0; return !!s && new Date(it.updated) > new Date(s); }
+  function markAllSeen() { var now = new Date().toISOString(); D.items.forEach(function (it) { if (it.pdir) SEEN[it.pdir] = now; }); try { localStorage.setItem("rh-seen", JSON.stringify(SEEN)); } catch (e) {} var y = window.scrollY; draw(); window.scrollTo(0, y); }
+  var ext = function (it) { return it.kind === "link" ? ' target="_blank" rel="noopener noreferrer"' : ""; };
+
+  var WAIT = {"new": "만들기 대기", edit: "변경 대기", del: "지우기 대기"};
+  function drawHome() {
+    var h = projList().map(function (p) {
+      var its = itemsOf(p.id), has = {}, SG = stagesOf(p.id);
+      its.forEach(function (it) { has[it.category] = 1; });
+      PEND.items.forEach(function (x) { if (x.op === "add" && x.project === p.id) has[x.category] = 1; });
+      var rail = SG.map(function (s) { return '<span class="seg' + (has[s[0]] ? " on" : "") + '" title="' + esc(s[1]) + '"><i></i><span>' + esc(s[1]) + "</span></span>"; }).join("");
+      var nOn = SG.filter(function (s) { return has[s[0]]; }).length;
+      return '<a class="tile pcard' + (p.wait ? " wait" : "") + '" href="#p-' + esc(p.id) + '"><span class="go">' + IC.arrow + "</span>" +
+        "<div>" + (p.wait ? '<span class="tag wait">' + WAIT[p.wait] + "</span>" : '<span class="tag">' + esc(p.tag || "판") + "</span>") + "<h2>" + esc(p.name) + "</h2>" + (p.sub ? '<p class="psub">' + esc(p.sub) + "</p>" : "") + "</div>" +
+        (SG.length ? '<div class="rail" aria-label="섹션 ' + nOn + "/" + SG.length + '">' + rail + "</div>" : '<div class="rail none">아직 섹션 없음</div>') +
+        '<div class="pmeta"><span>페이지 <b class="mono">' + its.length + '</b></span><span>섹션 <b class="mono">' + nOn + "/" + SG.length + "</b></span>" +
+        '<span>마지막 갱신 <b>' + esc(ago(latest(its)) || "-") + "</b></span>" +
+        (its.filter(isNew).length ? '<span class="nw">새로 바뀜 ' + its.filter(isNew).length + "</span>" : "") +
+        (PEND.items.filter(function (x) { return x.project === p.id && (x.op === "add" || x.op === "del"); }).length ? '<span>게시 대기 <b class="mono">' + PEND.items.filter(function (x) { return x.project === p.id && (x.op === "add" || x.op === "del"); }).length + "</b></span>" : "") + "</div></a>";
+    }).join("");
+    var recent = D.items.filter(function (it) { return it.updated; }).sort(function (a, b) { return new Date(b.updated) - new Date(a.updated); }).slice(0, 6);
+    var nNew = D.items.filter(isNew).length;
+    h += '<div class="tile recent"><h3><span>최근 갱신' + (nNew ? ' · <span class="cnt-new">새로 바뀜 ' + nNew + "</span>" : "") + "</span>" +
+      (nNew ? '<button class="lnk" type="button" data-seen-all>모두 확인함</button>' : "") + '</h3><ul class="feed">' + (recent.map(function (it) {
+      return '<li><a href="' + esc(it.href) + '"' + ext(it) + '><span class="dot' + (isNew(it) ? " new" : isLive(it) ? " live" : "") + '" title="' + (isNew(it) ? "마지막으로 본 뒤 바뀜" : "") + '"></span><span class="t">' + esc(it.title) + "<small>" + esc(stageLabel(it.project, it.category)) + '</small></span><span class="ago">' + esc(ago(it.updated)) + "</span></a></li>";
+    }).join("") || '<li class="empty">아직 없음</li>') + "</ul></div>";
+    h += '<div class="tile shared"><h3>공유 중</h3>' + sharedList() + "</div>";
+    h += '<button class="tile newb" type="button" data-board="new"><b>' + IC.plus + "새 판</b><span>섹션을 직접 정해 새 연구 판을 만듭니다</span></button>";
+    $("bento").innerHTML = h;
+    $("bento").style.setProperty("--np", String(Math.max(1, projList().length)));
+  }
+  function sharedList() {
+    var sh = D.items.filter(function (it) { return shareOf(it) !== "private"; });
+    if (!sh.length) return '<div class="empty">공유 중인 페이지가 없습니다. 페이지 카드의 ‘공유’에서 링크나 초대를 만들 수 있습니다.</div>';
+    return '<ul class="feed">' + sh.map(function (it) {
+      var s = SHARE[shareOf(it)];
+      return '<li><a href="' + esc(it.href) + '"><span style="color:var(--muted);display:grid">' + s[0] + '</span><span class="t">' + esc(it.title) + "<small>" + s[1] + (it.share.n ? " · " + it.share.n + "명" : "") + "</small></span><span></span></a></li>";
+    }).join("") + "</ul>";
+  }
+  function card(it) {
+    var pd = it.kind === "upload" ? pendFor(it) : null;
+    var kind = it.kind === "db" ? '<span class="chip' + (isLive(it) ? " live" : "") + '" title="틱(30분마다)이 원본 데이터를 다시 읽어 새로 짓는 페이지"><span class="dot' + (isLive(it) ? " live" : "") + '"></span>자동 갱신</span>'
+      : it.kind === "link" ? '<span class="chip">외부 링크</span>'
+      : it.kind === "upload" ? (pd ? '<span class="chip wait">' + (pd.op === "del" ? "내리기 대기" : "새 버전 대기") + "</span>" : '<span class="chip" title="허브에서 올린 HTML · 격리된 창에서 열립니다">올린 HTML</span>') : "";
+    var sm = shareOf(it), shb = SHARE[sm] ? '<span class="chip sh" title="공유 상태">' + SHARE[sm][0] + SHARE[sm][1] + (it.share.n ? " · " + it.share.n : "") + "</span>" : "";
+    var shareBtn = it.kind === "link" ? "" : '<button class="mini" type="button" data-share="' + esc(it.pdir) + '">' + (SHARE[sm] ? SHARE[sm][0] : IC.lock) + "공유</button>";
+    // The whole card opens the page: the title link is stretched over the card (no nested links — buttons sit above it).
+    return '<article class="card"><div class="top">' + (isNew(it) ? '<span class="newchip" title="마지막으로 본 뒤 바뀜">새로 바뀜</span>' : "") + kind + shb + shareBtn +
+      (it.kind === "link" ? "" : ren("p:" + it.project + "/" + it.category + "/" + it.slug)) + "</div>" +
+      '<div><h3><a class="card-link" href="' + esc(it.href) + '"' + ext(it) + ">" + esc(it.title) + (it.kind === "link" ? " ↗" : "") + "</a></h3>" + (it.desc ? "<p>" + esc(it.desc) + "</p>" : "") + "</div>" +
+      '<div class="foot"><span class="when" title="' + esc(it.updated) + '"><b>' + esc(ago(it.updated)) + '</b> · <span class="mono">' + stamp(it.updated) + "</span></span>" +
+      (it.size ? '<span class="mono">' + esc(fmtSize(it.size)) + "</span>" : "") +
+      (it.kind === "upload" && !pd ? '<span class="acts"><button class="mini" type="button" data-upv="' + esc(it.pdir) + '">새 버전</button><button class="mini danger" type="button" data-updel="' + esc(it.pdir) + '">내리기</button></span>' : "") + "</div></article>";
+  }
+  function ren(key) { return '<button class="ren" type="button" data-ren="' + esc(key) + '" aria-label="이름 바꾸기" title="이름 바꾸기">' + IC.edit + "</button>"; }
+  function pendCard(x) {
+    return '<article class="card pend"><div class="top"><span class="chip wait">게시 대기</span><button class="mini" type="button" data-upcancel="' + esc(x.id) + '">취소</button></div>' +
+      "<div><h3>" + esc(x.title) + '</h3><p>1~2분 안에 올라갑니다.</p></div><div class="foot"><span class="mono">' + stamp(x.at) + " 올림</span></div></article>";
+  }
+  function drawProject(pid) {
+    var its = itemsOf(pid), p = byProj[pid], SG = stagesOf(pid);
+    var steps = SG.map(function (s, i) {
+      var n = its.filter(function (it) { return it.category === s[0]; }).length, nn = its.filter(function (it) { return it.category === s[0] && isNew(it); }).length;
+      n += pendOf(pid, s[0]).length;
+      return '<a class="step ' + (n ? "has" : "vac") + '" href="#st-' + esc(s[0]) + '" data-st="' + esc(s[0]) + '"><span class="n">' + String(i + 1).padStart(2, "0") + '</span><span class="nm">' + esc(s[1]) + (nn ? '<span class="nd" title="새로 바뀐 페이지 ' + nn + '개"></span>' : "") + '</span><span class="ct">' + (n ? "페이지 " + n : "아직 없음") + "</span></a>";
+    }).join("");
+    var body = SG.map(function (s, i) {
+      var list = its.filter(function (it) { return it.category === s[0]; }), pl = pendOf(pid, s[0]);
+      list.sort(function (a, b) { return (b.updated || "").localeCompare(a.updated || ""); });
+      var any = list.length + pl.length;
+      return '<section class="stage' + (any ? "" : " vacant") + '" id="st-' + esc(s[0]) + '" data-cat="' + esc(s[0]) + '"><div class="stage-h"><span class="no">' + String(i + 1).padStart(2, "0") + "</span>" +
+        "<h2>" + esc(s[1]) + ren("s:" + pid + "/" + s[0]) + '</h2><span class="hint">' + esc(any ? s[2] : "아직 페이지 없음") + "</span></div>" +
+        (any ? '<div class="cards">' + pl.map(pendCard).join("") + list.map(card).join("") + "</div>" : "") + "</section>";
+    }).join("");
+    var note = p.wait ? '<div class="pnote"><span class="chip wait">' + WAIT[p.wait] + "</span><span>" +
+      (p.wait === "del" ? "이 판은 1~2분 안에 지워집니다." : p.wait === "new" ? "새 판은 1~2분 안에 허브에 올라갑니다. 지금 HTML을 올려 두어도 됩니다." : "판 변경이 1~2분 안에 반영됩니다.") +
+      '</span><button class="mini" type="button" data-upcancel="' + esc(p.waitId) + '">취소</button></div>' : "";
+    $("project").innerHTML = '<div style="display:grid;gap:32px"><div class="phead"><span class="eyebrow">' + esc(p.tag || "판") + "</span><h1>" + esc(p.name) + ren("b:" + pid) + "</h1>" +
+      (p.sub ? "<p>" + esc(p.sub) + "</p>" : "") + '<div class="pact"><button class="btn ink" type="button" data-upload' + (SG.length ? "" : " disabled") + ">" + IC.up + "HTML 올리기</button>" +
+      '<button class="btn" type="button" data-board="' + esc(pid) + '">' + IC.edit + (p.own ? "판 편집" : "섹션 추가") + "</button></div>" +
+      "</div>" + note + (SG.length ? '<nav class="stepper" aria-label="섹션">' + steps + "</nav>" + body
+        : '<div class="nosec"><b>아직 섹션이 없습니다</b><span>섹션을 만들면 그 아래에 HTML을 올릴 수 있습니다. 예: 데이터 · 실험 · 논문 · shared</span>' +
+          '<button class="btn ink" type="button" data-board="' + esc(pid) + '">' + IC.plus + "섹션 만들기</button></div>") + "</div>";
+    $("project").querySelectorAll("a.step").forEach(function (j) {
+      j.addEventListener("click", function (e) { e.preventDefault(); var t = $("st-" + j.getAttribute("data-st")); if (t) t.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"}); });
+    });
+  }
+  function draw() {
+    syncProj();
+    var m = /^#p-(.+)$/.exec(location.hash), pid = m && byProj[decodeURIComponent(m[1])] ? decodeURIComponent(m[1]) : "";
+    $("home").hidden = !!pid; $("project").hidden = !pid;
+    $("crumb-sl").hidden = $("crumb-p").hidden = !pid;
+    if (pid) { $("crumb-p").textContent = String(byProj[pid].name).split(" · ")[0]; drawProject(pid); } else drawHome();
+  }
+  function route() { draw(); window.scrollTo(0, 0); }
+  window.addEventListener("rh-share", function (e) {
+    var d = e.detail || {};
+    D.items.forEach(function (it) { if (it.pdir === d.pdir) it.share = {mode: d.mode, n: d.n}; });
+    var y = window.scrollY; draw(); window.scrollTo(0, y);
+  });
+  // owner tools: share dialog · ⌘K search · theme (rh-ui.js — the same script the page bar uses)
+  function withUI(fn) {
+    if (window.RHUI) return fn(window.RHUI);
+    window.addEventListener("rh-ui-ready", function () { fn(window.RHUI); }, {once: true});
+  }
+  var s = document.createElement("script"); s.src = "rh-ui.js?v=" + (D.uv || ""); document.head.appendChild(s);
+  // boards made in the hub and upload pages come from the cloud step (GitHub Actions → u.enc, opened with K_u)
+  var D0 = {projects: D.projects.slice(), stages: D.stages.slice(), items: D.items.slice()}, cloudDone = false;
+  var CLOUD = null;
+  function liveNames() {
+    var n = Object.assign({}, (CLOUD && CLOUD.names) || {});
+    PEND.items.forEach(function (x) { if (x.op === "names" && x.set) Object.keys(x.set).forEach(function (k) { if (x.set[k]) n[k] = x.set[k]; else delete n[k]; }); });
+    return n;
+  }
+  function mergeCloud(c) {
+    if (c) CLOUD = c; else c = CLOUD;
+    if (!c) return applyNames();
+    var mp = {}; D0.projects.forEach(function (p) { mp[p.id] = 1; });
+    var bd = c.boards || [], keep = {};
+    D.items.forEach(function (it) { if (it.share) keep[it.pdir] = it.share; });
+    D.projects = D0.projects.concat(bd.filter(function (r) { return r.kind === "project" && !mp[r.project]; }).map(function (r) {
+      return {id: r.project, name: r.title, sub: r.desc || "", tag: r.category && r.category !== "-" ? r.category : "", own: true}; }));
+    D.stages = D0.stages.concat(bd.filter(function (r) {
+      return r.kind === "stage" && !D0.stages.some(function (x) { return x.project === r.project && x.key === r.category; }); }).map(function (r) {
+      return {key: r.category, label: r.title, hint: r.desc || "", project: r.project, own: true}; }));
+    D.items = D0.items.concat((c.items || []).map(function (it) { return Object.assign({}, it, {share: keep[it.pdir] || {mode: "private", n: 0}}); }));
+    D.rej = c.rej || [];
+    applyNames();
+    $("foot").textContent = "페이지 " + D.items.length + " · 빌드 " + stamp(D.built);
+  }
+  function applyNames() {   // the hub's own data keeps the originals (o*) — a reset shows them again at once
+    var N = liveNames();
+    D.projects = D.projects.map(function (p) { var o = p.oname || p.name; return Object.assign({}, p, {oname: o, name: (!p.own && N["b:" + p.id]) || o}); });
+    D.stages = D.stages.map(function (s) { var o = s.olabel || s.label; return Object.assign({}, s, {olabel: o, label: (!s.own && N["s:" + s.project + "/" + s.key]) || o}); });
+    D.items = D.items.map(function (it) { var o = it.otitle || it.title; return Object.assign({}, it, {otitle: o, title: (it.kind !== "upload" && N["p:" + it.project + "/" + it.category + "/" + it.slug]) || o}); });
+  }
+  function redraw() { var y = window.scrollY; draw(); window.scrollTo(0, y); }
+  withUI(function (U) {
+    U.cloud().then(function (c) {
+      mergeCloud(c);
+      if (!cloudDone) { cloudDone = true; route(); } else redraw();
+      afterCloud(U);
+    });
+  });
+  function afterCloud(U) {
+    U.items(D.items.map(function (it) { return {t: it.title, sl: stageLabel(it.project, it.category), pj: it.project, c: it.category, pn: String((byProj[it.project] || {}).name || "").split(" · ")[0], d: it.desc, h: new URL(it.href, location.href).href, x: it.kind === "link"}; }));
+    // badges from the live share settings (public ctl copy, or the API with the token) — the build's copy can be up to one tick old
+    U.state().then(function (r) {
+      var changed = false;
+      D.items.forEach(function (it) {
+        var e = r.st.pages[it.pdir]; if (!e) return;
+        var nw = {mode: e.mode || "private", n: (e.invites || []).length};
+        if (!it.share || nw.mode !== it.share.mode || nw.n !== it.share.n) { it.share = nw; changed = true; }
+      });
+      if (changed) { var y = window.scrollY; draw(); window.scrollTo(0, y); }
+    }).catch(function () {});
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-share]"); if (!b) return;
+    e.preventDefault();
+    var it = D.items.filter(function (x) { return x.pdir === b.getAttribute("data-share"); })[0];
+    withUI(function (U) { U.share({pdir: it.pdir, title: it.title}); });
+  });
+  document.addEventListener("click", function (e) { if (e.target.closest("[data-seen-all]")) markAllSeen(); });
+  // ---- uploads ----------------------------------------------------------------------------------------------------
+  function curProject() { var m = /^#p-(.+)$/.exec(location.hash); return m && byProj[decodeURIComponent(m[1])] ? decodeURIComponent(m[1]) : ""; }
+  function openUpload(extra) {
+    withUI(function (U) {
+      var pl = projList().filter(function (p) { return p.wait !== "del"; }), by = {};
+      pl.forEach(function (p) { by[p.id] = stagesOf(p.id).map(function (s) { return {key: s[0], label: s[1]}; }); });
+      U.upload(Object.assign({projects: pl.map(function (p) { return {id: p.id, name: p.name}; }), stagesBy: by,
+                              project: curProject() || (pl[0] || {}).id}, extra || {}));
+    });
+  }
+  function refreshPending() {
+    withUI(function (U) {
+      if (!U.pending) return;
+      U.pending().then(async function (r) {
+        if ((r.gone || []).length) mergeCloud(await U.cloud(true));   // left the inbox = live (or refused) → the new list
+        (r.gone || []).forEach(function (x) {
+          var bad = (D.rej || []).filter(function (j) { return j.id === x.id; })[0];
+          if (bad) U.toast(x.op === "board" ? "‘" + x.title + "’ 판 변경을 반영하지 못했습니다: " + bad.why : x.op === "names" ? "이름을 바꾸지 못했습니다: " + bad.why : "‘" + x.title + "’을 올리지 못했습니다: " + bad.why);
+        });
+        PEND = r; mergeCloud(); redraw();
+        if (r.items.length) { clearTimeout(pendT); pendT = setTimeout(refreshPending, 15000); }   // keep watching while something waits
+      }).catch(function () {});
+    });
+  }
+  var pendT = 0;
+  window.addEventListener("rh-inbox", refreshPending);
+  refreshPending();
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-upload],[data-upv],[data-updel],[data-upcancel]"); if (!b) return;
+    e.preventDefault();
+    var it = D.items.filter(function (x) { return x.pdir === (b.getAttribute("data-upv") || b.getAttribute("data-updel")); })[0];
+    if (b.hasAttribute("data-upload")) openUpload();
+    else if (b.hasAttribute("data-upv") && it) openUpload({replace: {project: it.project, category: it.category, slug: it.slug, title: it.title}});
+    else if (b.hasAttribute("data-updel") && it) {
+      if (b.getAttribute("data-armed") !== "1") {   // two-step confirm without a blocking dialog
+        b.setAttribute("data-armed", "1"); b.textContent = "정말 내리기"; setTimeout(function () { if (b.isConnected) { b.removeAttribute("data-armed"); b.textContent = "내리기"; } }, 2500); return;
+      }
+      b.disabled = true;
+      withUI(function (U) { U.unlist({project: it.project, category: it.category, slug: it.slug, title: it.title}).then(function () { b.disabled = false; }); });
+    } else if (b.hasAttribute("data-upcancel")) {
+      b.disabled = true;
+      withUI(function (U) { U.cancelUpload(b.getAttribute("data-upcancel")).then(function (ok) { U.toast(ok ? "취소했습니다" : "취소하지 못했습니다 · 이미 반영 중일 수 있습니다"); }); });
+    }
+  });
+  // renames: the pencil next to a board / section / page title (rh-ui rename → names op → the cloud step's map)
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-ren]"); if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var k = b.getAttribute("data-ren"), kind = k[0], rest = k.slice(2), f;
+    if (kind === "b") { var p = byProj[rest]; f = {key: k, label: "판 이름", cur: p.name, orig: p.own ? null : p.oname, group: "판"}; }
+    else if (kind === "s") { var pj = rest.split("/")[0], sk = rest.slice(pj.length + 1), st = D.stages.filter(function (x) { return x.project === pj && x.key === sk; })[0] || {};
+      var ps = stagesOf(pj).filter(function (x) { return x[0] === sk; })[0] || [];
+      f = {key: k, label: "섹션 이름", cur: ps[1] || st.label || sk, orig: st.own || !st.key ? null : st.olabel, group: "섹션"}; }
+    else { var it = D.items.filter(function (x) { return x.project + "/" + x.category + "/" + x.slug === rest; })[0];
+      f = {key: k, label: "페이지 제목", cur: it.title, orig: it.kind === "upload" ? null : it.otitle, group: "페이지"};
+      f.note = 1; }
+    withUI(function (U) { U.rename({title: f.cur, fields: [f]}); });
+  });
+  window.addEventListener("rh-names", function () { refreshPending(); });
+  // boards (판): new · edit sections — rh-ui.js sends op board to the inbox; the view follows from PEND at once
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-board]"); if (!b) return;
+    e.preventDefault();
+    var pid = b.getAttribute("data-board"), p = byProj[pid];
+    withUI(function (U) {
+      if (pid === "new" || !p) return U.board({ids: projList().map(function (x) { return x.id; })});
+      var used = {};
+      itemsOf(pid).forEach(function (it) { used[it.category] = (used[it.category] || 0) + 1; });
+      PEND.items.forEach(function (x) { if (x.op === "add" && x.project === pid) used[x.category] = (used[x.category] || 0) + 1; });
+      var SG = stagesOf(pid);
+      U.board({project: {id: pid, name: p.name, own: !!p.own, pages: itemsOf(pid).length},
+               fixed: SG.filter(function (s) { return !s[3]; }).map(function (s) { return {key: s[0], label: s[1], n: used[s[0]] || 0}; }),
+               stages: SG.filter(function (s) { return s[3]; }).map(function (s) { return {key: s[0], label: s[1], n: used[s[0]] || 0}; })});
+    });
+  });
+  window.addEventListener("rh-board", function (e) {   // after a send: go to the new board / leave a board being removed
+    var d = e.detail || {};
+    if (d.del) { if (curProject() === d.project) location.hash = ""; }
+    else if (d.new) location.hash = "#p-" + encodeURIComponent(d.project);
+  });
+  // drag files from the desktop onto the hub → the upload dialog, section = the one under the pointer
+  var dragN = 0;
+  function hasFiles(e) { return e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], "Files") >= 0; }
+  function dlgOpen() { var u = document.getElementById("rh-ui"); return !!(u && u.shadowRoot && u.shadowRoot.querySelector(".ov")); }
+  function dropTarget(e) {
+    var sec = e.target && e.target.closest && e.target.closest("section.stage[data-cat]"), pid = curProject();
+    var card = !pid && e.target && e.target.closest && e.target.closest("a.pcard[href^='#p-']");   // home: the project card under the pointer
+    if (card) pid = decodeURIComponent(card.getAttribute("href").slice(3));
+    var cat = sec ? sec.getAttribute("data-cat") : "";
+    return {pid: pid, cat: cat};
+  }
+  document.addEventListener("dragenter", function (e) { if (!hasFiles(e) || dlgOpen()) return; dragN++; $("dropov").hidden = false; });
+  document.addEventListener("dragleave", function () { if (--dragN <= 0) { dragN = 0; $("dropov").hidden = true; } });
+  document.addEventListener("dragover", function (e) {
+    if (!hasFiles(e) || dlgOpen()) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = "copy";
+    var t = dropTarget(e), p = byProj[t.pid];
+    $("dropov-t").textContent = p ? "놓으면 ‘" + String(p.name).split(" · ")[0] + "’에 올립니다" : "판 카드 위에 놓으면 그 판으로 올립니다";
+    $("dropov-s").textContent = t.cat ? "섹션: " + stageLabel(t.pid, t.cat) : "HTML 파일 · 제목과 섹션은 다음 창에서 고릅니다";
+  });
+  document.addEventListener("drop", function (e) {
+    dragN = 0; $("dropov").hidden = true;
+    if (!hasFiles(e) || dlgOpen()) return;
+    e.preventDefault();
+    var t = dropTarget(e), files = Array.prototype.slice.call(e.dataTransfer.files);
+    openUpload({files: files, category: t.cat || "", project: t.pid || curProject() || (projList()[0] || {}).id});
+  });
+  window.addEventListener("pageshow", function (e) {   // back from a page (bfcache) → pick up what was just opened
+    if (!e.persisted) return;
+    try { SEEN = JSON.parse(localStorage.getItem("rh-seen") || "null") || SEEN; } catch (x) {}
+    var y = window.scrollY; draw(); window.scrollTo(0, y);
+  });
+  $("find").addEventListener("click", function () { withUI(function (U) { U.palette(); }); });
+  $("kbd").textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘K" : "Ctrl K";
+  function isDark() { var t = document.documentElement.getAttribute("data-theme"); return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+  function themeIcon() {   // shows what a click switches to
+    $("theme").innerHTML = isDark() ? IC.sun : IC.moon;
+    $("theme").setAttribute("aria-label", isDark() ? "밝은 화면으로" : "어두운 화면으로"); $("theme").title = $("theme").getAttribute("aria-label");
+  }
+  $("theme").addEventListener("click", function () {
+    var nx = isDark() ? "light" : "dark";
+    try { localStorage.setItem("rh-theme", nx); } catch (e) {}
+    document.documentElement.setAttribute("data-theme", nx); themeIcon();
+    window.dispatchEvent(new CustomEvent("rh-theme", {detail: nx}));
+  });
+  window.addEventListener("rh-theme", themeIcon);
+  try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", themeIcon); } catch (e) {}
+  themeIcon();
+  window.addEventListener("hashchange", route);
+  $("foot").textContent = "페이지 " + D.items.length + " · 빌드 " + stamp(D.built);
+  var m0 = /^#p-(.+)$/.exec(location.hash);   // a board known only from u.enc: wait for it (at most 2 s) instead of flashing home
+  $("lock").addEventListener("click", function () {
+    if (typeof window.__rhLock === "function") return window.__rhLock();
+    try { sessionStorage.removeItem("rh-key"); localStorage.removeItem("rh-key"); } catch (e) {}
+    location.reload();
+  });
+  if (!m0 || D.projects.some(function (p) { return p.id === decodeURIComponent(m0[1]); })) { route(); }
+  setTimeout(function () { if (!cloudDone) { cloudDone = true; route(); } }, 2000);
+})();
+</script>
+</body>
+</html>
