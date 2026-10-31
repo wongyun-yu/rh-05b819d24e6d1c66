@@ -1,0 +1,66 @@
+# Research hub — cloud step (tools/hub_cloud.py): uploads and boards made in the hub go live in about a minute, with no
+# build PC and no Claude session. It also deploys every PC build (push to main). Secret RH_UP_KEY = K_u (never the site key).
+# Logs are public: the script prints counts and op types only.
+name: hub
+on:
+  repository_dispatch:
+    types: [inbox]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: "Pages build version override (a commit SHA of this repo) — only to unstick a deployment"
+        required: false
+        default: ""
+  schedule:
+    - cron: "*/10 * * * *"   # fallback when a dispatch was missed (runs only if the inbox holds something)
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: hub
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 1
+      - run: python3 -m pip install -q cryptography
+      - id: check
+        name: anything to do
+        env:
+          RH_UP_KEY: ${{ secrets.RH_UP_KEY }}
+        run: python3 tools/hub_cloud.py check --repo .
+      - id: prep
+        name: apply the inbox
+        if: steps.check.outputs.go == 'true'
+        env:
+          RH_UP_KEY: ${{ secrets.RH_UP_KEY }}
+        run: python3 tools/hub_cloud.py prepare --repo . --out "$RUNNER_TEMP/site"
+      - if: steps.check.outputs.go == 'true'
+        uses: actions/configure-pages@v6
+      - id: artifact
+        if: steps.check.outputs.go == 'true'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ runner.temp }}/site
+      - id: deploy
+        name: deploy (build version = this run's up commit — deploy-pages would reuse the main commit and keep the old artifact)
+        if: steps.check.outputs.go == 'true'
+        env:
+          RH_UP_KEY: ${{ secrets.RH_UP_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/hub_cloud.py deploy --repo . --artifact-id "${{ steps.artifact.outputs.artifact_id }}" --ver "${{ inputs.ver || steps.prep.outputs.ver }}"
+      - name: clear the inbox
+        if: steps.check.outputs.go == 'true'
+        env:
+          RH_UP_KEY: ${{ secrets.RH_UP_KEY }}
+        run: python3 tools/hub_cloud.py finish --repo .
